@@ -15,4 +15,8 @@ const createUser = async (req, res) => {
     })
 }
 
-module.exports = { createUser };
+const findUser = async (req, res) => {
+    const users = await User.findAll();
+    return res.json(users)
+}
+module.exports = { createUser, findUser };
