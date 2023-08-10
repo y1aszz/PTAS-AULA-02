@@ -33,7 +33,15 @@ const authenticatedUser = async (req, res) => {
                 password: password
             }
         })
-        return res.json(isUserAthenticated);
+        const token = jwt.sign({ id: email }, secret.secret, {
+            expiresIn: 86400,
+        })
+
+        return res.json({
+            name: isUserAthenticated.name,
+            email: isUserAthenticated.email,
+            token: token
+        });
     } catch (error) {
         return res.json("Usuário não encontrado!");
     }
@@ -41,7 +49,7 @@ const authenticatedUser = async (req, res) => {
 
 
  const deleteUser = async (req, res) => {
-    const id = req.params 
+    const id = parseInt(req.params.id)
     await User.destroy({
       where: {
         id: id
