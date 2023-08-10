@@ -17,6 +17,54 @@ const createUser = async (req, res) => {
 
 const findUser = async (req, res) => {
     const users = await User.findAll();
-    return res.json(users)
+    try {
+        res.json(users);
+    } catch (error){
+        res.status(404).json("Ocorreu um erro na busca!")
+    };
 }
-module.exports = { createUser, findUser };
+
+const authenticatedUser = async (req, res) => {
+    const {email, password} = req.body;
+    try {
+        const isUserAthenticated = await User.findOne({
+            where:{
+                email: email,
+                password: password
+            }
+        })
+        return res.json(isUserAthenticated);
+    } catch (error) {
+        return res.json("Usuário não encontrado!");
+    }
+}
+
+
+ const deleteUser = async (req, res) => {
+    const id = req.params 
+    await User.destroy({
+      where: {
+        id: id
+    }
+ })
+ }
+
+ const alteraUser = async (req, res) =>{
+    const id = req.params
+    User.update(
+        {
+            name: name,
+            password: password,
+            email: email
+        },
+        {
+            where: {
+                id: id
+            }
+        }
+    )
+ }
+
+
+
+module.exports = { createUser, findUser, authenticatedUser };
